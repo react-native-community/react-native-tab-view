@@ -1,7 +1,5 @@
 const path = require('path');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const createExpoWebpackConfigAsync = require('@expo/webpack-config');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
 const node_modules = path.resolve(__dirname, 'node_modules');

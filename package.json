@@ -46,6 +46,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^9.1.1",
     "@expo/vector-icons": "^10.2.0",
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/bob": "^0.16.2",
     "@release-it/conventional-changelog": "^1.1.4",
     "@types/react": "^16.9.44",
@@ -56,6 +57,10 @@
     "eslint": "^7.6.0",
     "eslint-config-satya164": "^3.1.7",
     "eslint-plugin-react-native-globals": "^0.1.2",
+    "expo": "^39.0.3",
+    "expo-asset": "^8.2.0",
+    "expo-constants": "^9.2.0",
+    "expo-keep-awake": "^8.3.0",
     "husky": "^4.2.5",
     "jest": "^26.2.2",
     "prettier": "^2.0.5",
