@@ -422,6 +422,10 @@ export default class Pager<T extends Route> extends React.Component<
     if (navigationState.index === index) {
       this.jumpToIndex(index);
     } else {
+      if (this.interactionHandle === null) {
+        this.interactionHandle = InteractionManager.createInteractionHandle();
+      }
+
       onIndexChange(index);
 
       // When the index changes, the focused input will no longer be in current tab
@@ -518,6 +522,12 @@ export default class Pager<T extends Route> extends React.Component<
         set(this.isSwipeGesture, FALSE),
         set(this.gestureX, 0),
         set(this.velocityX, 0),
+        call([], () => {
+          if (this.interactionHandle !== null) {
+            InteractionManager.clearInteractionHandle(this.interactionHandle);
+            this.interactionHandle = null;
+          }
+        }),
         // When the animation finishes, stop the clock
         stopClock(this.clock),
       ]),
@@ -629,7 +639,10 @@ export default class Pager<T extends Route> extends React.Component<
 
             if (isSwiping === TRUE) {
               onSwipeStart?.();
-              this.interactionHandle = InteractionManager.createInteractionHandle();
+
+              if (this.interactionHandle === null) {
+                this.interactionHandle = InteractionManager.createInteractionHandle();
+              }
 
               if (keyboardDismissMode === 'auto') {
                 // @ts-ignore: the method is only available in newer React Native, but types aren't up-to-date
@@ -648,12 +661,6 @@ export default class Pager<T extends Route> extends React.Component<
               }
             } else {
               onSwipeEnd?.();
-
-              if (this.interactionHandle !== null) {
-                InteractionManager.clearInteractionHandle(
-                  this.interactionHandle
-                );
-              }
 
               if (keyboardDismissMode === 'auto') {
                 if (indexAtSwipeEnd === currentIndex) {
