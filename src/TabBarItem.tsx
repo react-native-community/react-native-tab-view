@@ -6,6 +6,7 @@ import {
   LayoutChangeEvent,
   TextStyle,
   ViewStyle,
+  AccessibilityProps,
 } from 'react-native';
 import TouchableItem from './TouchableItem';
 import { Scene, Route, NavigationState } from './types';
@@ -24,6 +25,7 @@ export type Props<T extends Route> = {
   pressColor?: string;
   pressOpacity?: number;
   getLabelText: (scene: Scene<T>) => string | undefined;
+  tabAccessibilityProps?: AccessibilityProps;
   getAccessible: (scene: Scene<T>) => boolean | undefined;
   getAccessibilityLabel: (scene: Scene<T>) => string | undefined;
   getTestID: (scene: Scene<T>) => string | undefined;
@@ -89,6 +91,7 @@ export default class TabBarItem<T extends Route> extends React.Component<
       renderBadge,
       getLabelText,
       getTestID,
+      tabAccessibilityProps,
       getAccessibilityLabel,
       getAccessible,
       activeColor = DEFAULT_ACTIVE_COLOR,
@@ -216,14 +219,6 @@ export default class TabBarItem<T extends Route> extends React.Component<
       <TouchableItem
         borderless
         testID={getTestID(scene)}
-        accessible={getAccessible(scene)}
-        accessibilityLabel={accessibilityLabel}
-        accessibilityTraits={isFocused ? ['button', 'selected'] : 'button'}
-        accessibilityComponentType="button"
-        accessibilityRole="tab"
-        accessibilityState={{ selected: isFocused }}
-        // @ts-ignore: this is to support older React Native versions
-        accessibilityStates={isFocused ? ['selected'] : []}
         pressColor={pressColor}
         pressOpacity={pressOpacity}
         delayPressIn={0}
@@ -231,6 +226,15 @@ export default class TabBarItem<T extends Route> extends React.Component<
         onPress={onPress}
         onLongPress={onLongPress}
         style={tabContainerStyle}
+        accessibilityTraits={isFocused ? ['button', 'selected'] : 'button'}
+        accessibilityComponentType="button"
+        accessibilityRole="tab"
+        accessibilityState={{ selected: isFocused }}
+        // @ts-ignore: this is to support older React Native versions
+        accessibilityStates={isFocused ? ['selected'] : []}
+        {...tabAccessibilityProps}
+        accessible={getAccessible(scene)}
+        accessibilityLabel={accessibilityLabel}
       >
         <View pointerEvents="none" style={[styles.item, tabStyle]}>
           {icon}

@@ -8,6 +8,7 @@ import {
   LayoutChangeEvent,
   I18nManager,
   Platform,
+  AccessibilityProps,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import TabBarItem, { Props as TabBarItemProps } from './TabBarItem';
@@ -31,6 +32,7 @@ export type Props<T extends Route> = SceneRendererProps & {
   pressColor?: string;
   pressOpacity?: number;
   getLabelText: (scene: Scene<T>) => string | undefined;
+  tabAccessibilityProps?: AccessibilityProps;
   getAccessible: (scene: Scene<T>) => boolean | undefined;
   getAccessibilityLabel: (scene: Scene<T>) => string | undefined;
   getTestID: (scene: Scene<T>) => string | undefined;
@@ -326,6 +328,7 @@ export default class TabBar<T extends Route> extends React.Component<
       jumpTo,
       scrollEnabled,
       bounces,
+      tabAccessibilityProps,
       getAccessibilityLabel,
       getAccessible,
       getLabelText,
@@ -428,6 +431,7 @@ export default class TabBar<T extends Route> extends React.Component<
                 route: route,
                 navigationState: navigationState,
                 getAccessibilityLabel: getAccessibilityLabel,
+                tabAccessibilityProps: tabAccessibilityProps,
                 getAccessible: getAccessible,
                 getLabelText: getLabelText,
                 getTestID: getTestID,
