@@ -17,6 +17,7 @@ export type Props<T extends Route> = SceneRendererProps & {
   width: string | number;
   style?: StyleProp<ViewStyle>;
   getTabWidth: GetTabWidth;
+  tabBarSpacing: number;
 };
 
 export default class TabBarIndicator<T extends Route> extends React.Component<
@@ -58,14 +59,15 @@ export default class TabBarIndicator<T extends Route> extends React.Component<
   private getTranslateX = (
     position: Animated.AnimatedInterpolation,
     routes: Route[],
-    getTabWidth: GetTabWidth
+    getTabWidth: GetTabWidth,
+    tabBarSpacing: number
   ) => {
     const inputRange = routes.map((_, i) => i);
 
     // every index contains widths at all previous indices
     const outputRange = routes.reduce<number[]>((acc, _, i) => {
       if (i === 0) return [0];
-      return [...acc, acc[i - 1] + getTabWidth(i - 1)];
+      return [...acc, acc[i - 1] + getTabWidth(i - 1) + tabBarSpacing];
     }, []);
 
     const translateX = position.interpolate({
@@ -85,6 +87,7 @@ export default class TabBarIndicator<T extends Route> extends React.Component<
       width,
       style,
       layout,
+      tabBarSpacing,
     } = this.props;
     const { routes } = navigationState;
 
@@ -93,7 +96,7 @@ export default class TabBarIndicator<T extends Route> extends React.Component<
     if (layout.width) {
       const translateX =
         routes.length > 1
-          ? this.getTranslateX(position, routes, getTabWidth)
+          ? this.getTranslateX(position, routes, getTabWidth, tabBarSpacing)
           : 0;
 
       transform.push({ translateX });

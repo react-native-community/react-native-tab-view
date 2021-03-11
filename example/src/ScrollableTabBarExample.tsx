@@ -42,7 +42,10 @@ export default class ScrollableTabBarExample extends React.Component<
     });
 
   private renderTabBar = (
-    props: SceneRendererProps & { navigationState: State }
+    props: SceneRendererProps & {
+      navigationState: State;
+      tabBarSpacing: number;
+    }
   ) => (
     <TabBar
       {...props}

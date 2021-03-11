@@ -352,6 +352,10 @@ return (
 );
 ```
 
+### `tabBarSpacing`
+
+Define a spacing between tabs. 
+
 #### TabBar Props
 
 ##### `getLabelText`
