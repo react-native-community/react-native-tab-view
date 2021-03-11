@@ -59,11 +59,16 @@ export type Props<T extends Route> = SceneRendererProps & {
   labelStyle?: StyleProp<TextStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
+  tabBarSpacing: number;
 };
 
 type State = {
   layout: Layout;
   tabWidths: { [key: string]: number };
+};
+
+const Separator = ({ width }: { width: number }) => {
+  return <View style={{ width }} />;
 };
 
 export default class TabBar<T extends Route> extends React.Component<
@@ -176,6 +181,7 @@ export default class TabBar<T extends Route> extends React.Component<
     return routes.reduce<number>(
       (acc, _, i) =>
         acc +
+        (i > 0 ? props.tabBarSpacing : 0) +
         this.getComputedTabWidth(
           i,
           layout,
@@ -225,7 +231,12 @@ export default class TabBar<T extends Route> extends React.Component<
 
         // To get the current index centered we adjust scroll amount by width of indexes
         // 0 through (i - 1) and add half the width of current index i
-        return total + (index === i ? tabWidth / 2 : tabWidth);
+        return (
+          total +
+          (index === i
+            ? (tabWidth + props.tabBarSpacing) / 2
+            : tabWidth + props.tabBarSpacing)
+        );
       },
       0
     );
@@ -300,17 +311,22 @@ export default class TabBar<T extends Route> extends React.Component<
       contentContainerStyle,
       style,
       indicatorContainerStyle,
+      tabBarSpacing,
     } = this.props;
     const { layout, tabWidths } = this.state;
     const { routes } = navigationState;
 
     const isWidthDynamic = this.getFlattenedTabWidth(tabStyle) === 'auto';
     const tabBarWidth = this.getTabBarWidth(this.props, this.state);
+    const separatorsWidth = Math.max(0, routes.length - 1) * tabBarSpacing;
+
     const tabBarWidthPercent = `${routes.length * 40}%`;
     const translateX = this.getTranslateX(
       this.scrollAmount,
       this.getMaxScrollDistance(tabBarWidth, layout.width)
     );
+
+    const separatorPercent = (separatorsWidth / tabBarWidth) * 100;
 
     return (
       <Animated.View
@@ -322,8 +338,8 @@ export default class TabBar<T extends Route> extends React.Component<
           style={[
             styles.indicatorContainer,
             scrollEnabled ? { transform: [{ translateX }] as any } : null,
-            tabBarWidth
-              ? { width: tabBarWidth }
+            tabBarWidth > separatorsWidth
+              ? { width: tabBarWidth - separatorsWidth }
               : scrollEnabled
               ? { width: tabBarWidthPercent }
               : null,
@@ -335,7 +351,9 @@ export default class TabBar<T extends Route> extends React.Component<
             layout,
             navigationState,
             jumpTo,
-            width: isWidthDynamic ? 'auto' : `${100 / routes.length}%`,
+            width: isWidthDynamic
+              ? 'auto'
+              : `${(100 - separatorPercent) / routes.length}%`,
             style: indicatorStyle,
             getTabWidth: (i: number) =>
               this.getComputedTabWidth(
@@ -346,6 +364,7 @@ export default class TabBar<T extends Route> extends React.Component<
                 tabWidths,
                 this.getFlattenedTabWidth(tabStyle)
               ),
+            tabBarSpacing,
           })}
         </Animated.View>
         <View style={styles.scroll}>
@@ -363,7 +382,12 @@ export default class TabBar<T extends Route> extends React.Component<
             contentContainerStyle={[
               styles.tabContent,
               scrollEnabled
-                ? { width: tabBarWidth || tabBarWidthPercent }
+                ? {
+                    width:
+                      tabBarWidth > separatorsWidth
+                        ? tabBarWidth
+                        : tabBarWidthPercent,
+                  }
                 : styles.container,
               contentContainerStyle,
             ]}
@@ -380,7 +404,7 @@ export default class TabBar<T extends Route> extends React.Component<
             )}
             ref={this.scrollViewRef}
           >
-            {routes.map((route: T) => {
+            {routes.map((route: T, index) => {
               const props: TabBarItemProps<T> & { key: string } = {
                 key: route.key,
                 position: position,
@@ -438,10 +462,17 @@ export default class TabBar<T extends Route> extends React.Component<
                 style: tabStyle,
               };
 
-              return renderTabBarItem ? (
-                renderTabBarItem(props)
-              ) : (
-                <TabBarItem {...props} />
+              return (
+                <React.Fragment key={route.key}>
+                  {tabBarSpacing > 0 && index > 0 ? (
+                    <Separator width={tabBarSpacing} />
+                  ) : null}
+                  {renderTabBarItem ? (
+                    renderTabBarItem(props)
+                  ) : (
+                    <TabBarItem {...props} />
+                  )}
+                </React.Fragment>
               );
             })}
           </Animated.ScrollView>

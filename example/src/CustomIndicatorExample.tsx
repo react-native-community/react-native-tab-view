@@ -123,7 +123,10 @@ export default class CustomIndicatorExample extends React.Component<{}, State> {
   };
 
   private renderTabBar = (
-    props: SceneRendererProps & { navigationState: State }
+    props: SceneRendererProps & {
+      navigationState: State;
+      tabBarSpacing: number;
+    }
   ) => (
     <TabBar
       {...props}

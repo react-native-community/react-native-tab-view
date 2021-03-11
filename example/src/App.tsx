@@ -22,6 +22,7 @@ import TabBarIconExample from './TabBarIconExample';
 import CustomIndicatorExample from './CustomIndicatorExample';
 import CustomTabBarExample from './CustomTabBarExample';
 import CoverflowExample from './CoverflowExample';
+import TabBarSpacingExample from './TabBarSpacingExample';
 
 type State = {
   title: string;
@@ -50,6 +51,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   CustomIndicatorExample,
   CustomTabBarExample,
   CoverflowExample,
+  TabBarSpacingExample,
 ];
 
 const KeepAwake = () => {

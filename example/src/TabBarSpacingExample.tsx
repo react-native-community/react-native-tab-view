@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import {
   TabView,
   TabBar,
@@ -9,28 +8,28 @@ import {
   SceneRendererProps,
 } from 'react-native-tab-view';
 import Article from './Shared/Article';
+import Albums from './Shared/Albums';
 import Chat from './Shared/Chat';
 import Contacts from './Shared/Contacts';
 
-type Route = {
+type State = NavigationState<{
   key: string;
-  icon: React.ComponentProps<typeof Ionicons>['name'];
-};
+  title: string;
+}>;
 
-type State = NavigationState<Route>;
-
-export default class TabBarIconExample extends React.Component<{}, State> {
+export default class TabBarSpacingExample extends React.Component<{}, State> {
   // eslint-disable-next-line react/sort-comp
-  static title = 'Top tab bar with icons';
-  static backgroundColor = '#e91e63';
+  static title = 'Tab Bar Spacing';
+  static backgroundColor = '#3f51b5';
   static appbarElevation = 0;
 
-  state: State = {
-    index: 0,
+  state = {
+    index: 1,
     routes: [
-      { key: 'chat', icon: 'md-chatbubbles' },
-      { key: 'contacts', icon: 'md-people' },
-      { key: 'article', icon: 'md-list' },
+      { key: 'article', title: 'Article' },
+      { key: 'contacts', title: 'Contacts' },
+      { key: 'albums', title: 'Albums' },
+      { key: 'chat', title: 'Chat ' },
     ],
   };
 
@@ -39,30 +38,27 @@ export default class TabBarIconExample extends React.Component<{}, State> {
       index,
     });
 
-  private renderIcon = ({ route, color }: { route: Route; color: string }) => (
-    <Ionicons name={route.icon} size={24} color={color} />
-  );
-
   private renderTabBar = (
     props: SceneRendererProps & {
       navigationState: State;
       tabBarSpacing: number;
     }
-  ) => {
-    return (
-      <TabBar
-        {...props}
-        indicatorStyle={styles.indicator}
-        renderIcon={this.renderIcon}
-        style={styles.tabbar}
-      />
-    );
-  };
+  ) => (
+    <TabBar
+      {...props}
+      scrollEnabled
+      indicatorStyle={styles.indicator}
+      style={styles.tabbar}
+      tabStyle={styles.tab}
+      labelStyle={styles.label}
+    />
+  );
 
   private renderScene = SceneMap({
-    chat: Chat,
+    albums: Albums,
     contacts: Contacts,
     article: Article,
+    chat: Chat,
   });
 
   render() {
@@ -73,6 +69,7 @@ export default class TabBarIconExample extends React.Component<{}, State> {
         renderScene={this.renderScene}
         renderTabBar={this.renderTabBar}
         onIndexChange={this.handleIndexChange}
+        tabBarSpacing={40}
       />
     );
   }
@@ -80,9 +77,16 @@ export default class TabBarIconExample extends React.Component<{}, State> {
 
 const styles = StyleSheet.create({
   tabbar: {
-    backgroundColor: '#e91e63',
+    backgroundColor: '#3f51b5',
+  },
+  tab: {
+    width: 'auto',
+    padding: 0,
   },
   indicator: {
     backgroundColor: '#ffeb3b',
+  },
+  label: {
+    fontWeight: '400',
   },
 });
