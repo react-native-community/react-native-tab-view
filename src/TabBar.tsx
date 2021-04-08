@@ -134,6 +134,33 @@ export default class TabBar<T extends Route> extends React.Component<
     return tabStyle ? tabStyle.width : undefined;
   };
 
+  //
+  // when calculating the scroll distance, take into consideration also any spacing from the container
+  //
+  private getComputedContentSpacing = (style?: StyleProp<ViewStyle>) => {
+    const contentStyle = StyleSheet.flatten(style);
+
+    let space = 0;
+
+    if (typeof contentStyle?.marginLeft === 'number') {
+      space += contentStyle.marginLeft;
+    }
+
+    if (typeof contentStyle?.marginRight === 'number') {
+      space += contentStyle.marginRight;
+    }
+
+    if (typeof contentStyle?.paddingLeft === 'number') {
+      space += contentStyle.paddingLeft;
+    }
+
+    if (typeof contentStyle?.paddingRight === 'number') {
+      space += contentStyle.paddingRight;
+    }
+
+    return space;
+  };
+
   private getComputedTabWidth = (
     index: number,
     layout: Layout,
@@ -170,7 +197,7 @@ export default class TabBar<T extends Route> extends React.Component<
 
   private getTabBarWidth = (props: Props<T>, state: State) => {
     const { layout, tabWidths } = state;
-    const { scrollEnabled, tabStyle } = props;
+    const { scrollEnabled, tabStyle, contentContainerStyle } = props;
     const { routes } = props.navigationState;
 
     return routes.reduce<number>(
@@ -184,7 +211,7 @@ export default class TabBar<T extends Route> extends React.Component<
           tabWidths,
           this.getFlattenedTabWidth(tabStyle)
         ),
-      0
+      this.getComputedContentSpacing(contentContainerStyle)
     );
   };
 
