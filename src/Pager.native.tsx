@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, Keyboard, StyleSheet } from 'react-native';
+import { Animated, Keyboard, Platform, StyleSheet } from 'react-native';
 import ViewPager, {
   PageScrollStateChangedNativeEvent,
 } from 'react-native-pager-view';
@@ -11,6 +11,8 @@ import {
   EventEmitterProps,
   PagerProps,
 } from './types';
+
+const IS_IOS = Platform.OS === 'ios';
 
 const AnimatedViewPager = Animated.createAnimatedComponent(ViewPager);
 
@@ -54,17 +56,28 @@ export default function Pager<T extends Route>({
   const position = useAnimatedValue(index);
   const offset = useAnimatedValue(0);
 
+  // when swiping the next scene distance is always 1,
+  // but when pressing a tab can be greater
+  const nextSceneDistance = useAnimatedValue(1);
+
   React.useEffect(() => {
     navigationStateRef.current = navigationState;
   });
 
-  const jumpTo = React.useCallback((key: string) => {
-    const index = navigationStateRef.current.routes.findIndex(
-      (route: { key: string }) => route.key === key
-    );
+  const jumpTo = React.useCallback(
+    (key: string) => {
+      const index = navigationStateRef.current.routes.findIndex(
+        (route: { key: string }) => route.key === key
+      );
 
-    pagerRef.current?.setPage(index);
-  }, []);
+      if (IS_IOS) {
+        nextSceneDistance.setValue(Math.abs(indexRef.current - index));
+      }
+
+      pagerRef.current?.setPage(index);
+    },
+    [nextSceneDistance]
+  );
 
   React.useEffect(() => {
     if (keyboardDismissMode === 'auto') {
@@ -115,8 +128,17 @@ export default function Pager<T extends Route>({
     };
   }, []);
 
+  React.useEffect(() => {
+    if (IS_IOS) {
+      nextSceneDistance.setValue(1);
+    }
+  }, [navigationState.index, nextSceneDistance]);
+
   return children({
-    position: Animated.add(position, offset),
+    position: Animated.add(
+      position,
+      Animated.multiply(offset, nextSceneDistance)
+    ),
     addEnterListener,
     jumpTo,
     render: (children) => (
