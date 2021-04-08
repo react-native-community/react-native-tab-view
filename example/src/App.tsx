@@ -21,6 +21,7 @@ import TabBarIconExample from './TabBarIconExample';
 import CustomIndicatorExample from './CustomIndicatorExample';
 import CustomTabBarExample from './CustomTabBarExample';
 import CoverflowExample from './CoverflowExample';
+import CollapsibleHeaderExample from './CollapsibleHeaderExample';
 
 type State = {
   title: string;
@@ -47,6 +48,7 @@ const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   CustomIndicatorExample,
   CustomTabBarExample,
   CoverflowExample,
+  CollapsibleHeaderExample,
 ];
 
 const KeepAwake = () => {
@@ -230,6 +232,7 @@ const styles = StyleSheet.create({
   },
   appbar: {
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    zIndex: 1, // Needed for keeping the screen header above the collapsible tab view header
   },
   appbarContent: {
     flexDirection: 'row',
