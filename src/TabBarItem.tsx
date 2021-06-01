@@ -230,7 +230,7 @@ export default class TabBarItem<T extends Route> extends React.Component<
         onLayout={onLayout}
         onPress={onPress}
         onLongPress={onLongPress}
-        style={tabContainerStyle}
+        style={[tabContainerStyle, styles.pressable]}
       >
         <View pointerEvents="none" style={[styles.item, tabStyle]}>
           {icon}
@@ -261,5 +261,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
+  },
+  pressable: {
+    backgroundColor: 'transparent',
   },
 });
