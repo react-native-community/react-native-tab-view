@@ -15,6 +15,7 @@ type Props<T extends Route> = SceneRendererProps &
     index: number;
     children: (props: { loading: boolean }) => React.ReactNode;
     style?: StyleProp<ViewStyle>;
+    isSwiping: boolean;
   };
 
 type State = {
@@ -92,7 +93,7 @@ export default class SceneView<T extends Route> extends React.Component<
   };
 
   render() {
-    const { navigationState, index, layout, style } = this.props;
+    const { navigationState, index, layout, style, isSwiping } = this.props;
     const { loading } = this.state;
 
     const focused = navigationState.index === index;
@@ -111,6 +112,7 @@ export default class SceneView<T extends Route> extends React.Component<
             ? StyleSheet.absoluteFill
             : null,
           style,
+          focused || isSwiping? null: {height: 0},
         ]}
       >
         {
