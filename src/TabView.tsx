@@ -112,7 +112,7 @@ export default function TabView<T extends Route>({
                       lazy={typeof lazy === 'function' ? lazy({ route }) : lazy}
                       lazyPreloadDistance={lazyPreloadDistance}
                       navigationState={navigationState}
-                      style={sceneContainerStyle}
+                      containerStyle={sceneContainerStyle}
                     >
                       {({ loading }) =>
                         loading
