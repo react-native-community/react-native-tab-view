@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, Keyboard, StyleSheet } from 'react-native';
+import { Animated, Keyboard, StyleSheet, I18nManager } from 'react-native';
 import ViewPager, {
   PageScrollStateChangedNativeEvent,
 } from 'react-native-pager-view';
@@ -146,6 +146,7 @@ export default function Pager<T extends Route>({
         }}
         onPageScrollStateChanged={onPageScrollStateChanged}
         scrollEnabled={swipeEnabled}
+        layoutDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
       >
         {children}
       </AnimatedViewPager>

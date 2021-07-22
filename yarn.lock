@@ -8504,10 +8504,10 @@ react-native-builder-bob@^0.18.1:
   optionalDependencies:
     jetifier "^1.6.6"
 
-react-native-pager-view@^5.0.12:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.1.2.tgz#a6957afc81f5729cbb884fe963df3482e2f46877"
-  integrity sha512-UvPvjtuIkiI9Ti8NoMH+fiFj0ehfFv4WkNUGM46dOJfOxmE6Z/hoyJjymOHU//iLkQSMO+YNherZs0HcijdA2A==
+react-native-pager-view@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.3.0.tgz#75cd02ee51b6583a8101964ea630a2b937d167e6"
+  integrity sha512-ixQ2p2K+OcN5C+miGFvlQPuAwSTBb8v7Y3/8vbyNfGgyNyChfCHnedjA3avoAIfH9aUXoDt9fXYf5uhxhvS0Kg==
 
 react-native@~0.63.4:
   version "0.63.4"
